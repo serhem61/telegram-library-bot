@@ -1,0 +1,38 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>قارئ المكتبة</title>
+<style>
+body{font-family:system-ui;background:#111;color:#eee;margin:0;padding:16px;line-height:1.9}
+.night{background:#111;color:#eee}.day{background:#fafafa;color:#111}
+.card{max-width:640px;margin:auto;border:1px solid #444;border-radius:12px;padding:16px}
+img{max-width:180px;border-radius:8px;display:block;margin:8px auto}
+.bar{display:flex;gap:8px;margin:12px 0;flex-wrap:wrap}
+button{padding:8px 12px;border-radius:8px;border:1px solid #666;background:transparent;color:inherit}
+#desc{font-size:18px}
+</style></head><body class="night"><div class="card">
+<h2 id="t">📚 قارئ المكتبة</h2>
+<img id="cover" style="display:none"/>
+<div id="m"></div>
+<div class="bar">
+<button onclick="fs(1)">A+</button><button onclick="fs(-1)">A-</button>
+<button onclick="document.body.className=document.body.className=='night'?'day':'night'">☀️/🌙</button>
+</div>
+<p id="desc"></p>
+<h3>💬 اقتباسات</h3><ul id="q"></ul>
+<p><a id="dl" href="#">⬇️ تحميل من البوت</a></p>
+</div><script>
+let s=18;
+function fs(d){s=Math.min(26,Math.max(14,s+d));document.getElementById('desc').style.fontSize=s+'px'}
+(async()=>{
+ const id=new URLSearchParams(location.search).get('book');
+ if(!id){document.getElementById('m').textContent='لا يوجد كتاب';return}
+ const r=await fetch('/api/book?book='+id);const b=await r.json();
+ if(b.error){document.getElementById('m').textContent='غير موجود';return}
+ document.getElementById('t').textContent='📖 '+b.title;
+ document.getElementById('m').textContent=`${b.author||''} • ${b.category||''} • ⭐${b.rating_avg} (${b.rating_cnt})`;
+ document.getElementById('desc').textContent=b.description||'لا وصف';
+ if(b.cover){const c=document.getElementById('cover');c.src=b.cover;c.style.display='block'}
+ document.getElementById('q').innerHTML=(b.quotes||[]).map(x=>`<li>${x}</li>`).join('')||'<li>لا اقتباسات بعد</li>';
+ document.getElementById('dl').href='https://t.me/share/url?url='+encodeURIComponent('book:'+b.id);
+})()
+</script></body></html>

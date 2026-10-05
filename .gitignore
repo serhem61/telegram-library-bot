@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+library.db
+*.db-journal
+*.log
+*.err
+pipeline_state.json
+drive_dl/
+pipeline_dl/
+drv_*.txt
+.idea/

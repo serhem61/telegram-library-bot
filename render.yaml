@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: telegram-library-bot
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python bot.py
+    # Render يفحص هذا المسار للتأكد أن القارئ يعمل
+    healthCheckPath: /health
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
+      - key: ADMIN_IDS
+        sync: false
+      - key: MODE
+        value: webhook
+      # بعد أول نشر ضع رابط خدمتك هنا، مثال: https://telegram-library-bot.onrender.com
+      - key: WEBHOOK_URL
+        sync: false
+      # نفس رابط الخدمة + /app/ ليظهر زر 📖 داخل تلغرام، مثال: https://telegram-library-bot.onrender.com/app/
+      - key: WEBAPP_URL
+        sync: false
+      - key: LIB_CHANNEL
+        sync: false
+      # لا تضع PORT هنا — Render يحقنه تلقائياً والبوت يقرأه من config.py
